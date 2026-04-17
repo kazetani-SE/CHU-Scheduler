@@ -1,0 +1,34 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: CHU-schedule-database
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - CHU_schedule_psql:/var/lib/postgresql/data
+    networks:
+      - web
+  cloudbeaver:
+    image: dbeaver/cloudbeaver:latest
+    container_name: course-sphere-cloudbeaver
+    restart: on-failure:5
+    ports:
+      - 8978:8978
+    volumes:
+      - cloudbeaver:/opt/cloudbeaver/workspace
+    networks:
+      - web
+
+volumes:
+  CHU_schedule_psql:
+  cloudbeaver:
+networks:
+  web:
+    name: CHU-schedule-web
