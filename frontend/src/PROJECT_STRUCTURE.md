@@ -23,6 +23,78 @@ src/
 
 ---
 
+## Application Flow
+
+The application is divided into two main flows:
+
+---
+
+### 1. Render Flow (UI Layer)
+
+Responsible for displaying UI.
+```
+main.tsx
+↓
+App.tsx
+↓
+router/
+↓
+routes config (routes.tsx and index.tsx)
+↓
+layouts + pages (composition)
+↓
+components
+```
+
+**Description:**
+
+- Starts from `main.tsx` and mounts the app
+- `App.tsx` loads router and global providers
+- `router/` decides which page to render
+- `pages/` represents screens
+- `layouts/` wraps pages with shared UI
+- `components/` renders reusable UI elements
+
+---
+
+### 2. Logic Flow (Data Layer)
+
+Responsible for handling logic and data.
+
+```
+components / pages
+↓
+hooks/ 
+↓
+services/
+↓
+backend (API)
+```
+
+**Description:**
+
+- Triggered from user interaction in `components` or `pages`
+- `hooks/` handle state and business logic
+- `services/` call API using `apiClient`
+- Backend returns data → flows back up to UI
+
+---
+
+## Principles & Rules
+
+Separation of Concerns:
+
+- UI (components, layouts): render only
+- Logic (hooks): state + business logic
+- Data (services): API communication
+
+Rules:
+
+- No API calls inside components/pages
+- No business logic inside components
+- No hooks inside services
+---
+
 ## Folder Responsibilities
 
 ### assets/
