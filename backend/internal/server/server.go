@@ -2,6 +2,7 @@ package server
 
 import (
 	"backend/internal/config"
+	"backend/internal/database"
 	"fmt"
 
 	"github.com/caarlos0/env/v11"
@@ -10,6 +11,7 @@ import (
 
 func NewServer() *fuego.Server {
 	cfg, _ := env.ParseAs[config.ServerConfig]()
+	db := database.NewPool()
 	port := 8978
 	fmt.Printf("INFO Server CloudBearver http://localhost:%d/\n", port)
 	fmt.Printf("INFO Server Fuego test api http://localhost:%d/swagger/index.html#/\n", cfg.Port)
@@ -22,6 +24,9 @@ func NewServer() *fuego.Server {
 		}),
 		),
 	)
+
+	routes := &Routes{db: db}
+	routes.RegisterRoutes(server)
 
 	return server
 }
