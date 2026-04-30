@@ -17,7 +17,6 @@ export default function ExampleHeader(){
         </div>
     );
 }
-
 /**
  * RULES: just contain layout UI
  * - Does not contain business logic
