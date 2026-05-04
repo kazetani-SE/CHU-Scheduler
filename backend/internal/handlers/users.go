@@ -18,6 +18,7 @@ func NewUsersResource(db *pgxpool.Pool) *UsersResource {
 
 func (ur *UsersResource) ListUsers(c fuego.ContextNoBody) ([]database.User, error) {
 	ctx := context.Background()
+
 	queries := database.New(ur.db)
 	users, _ := queries.ListUsers(ctx)
 

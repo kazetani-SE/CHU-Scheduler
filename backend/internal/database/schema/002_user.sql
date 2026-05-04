@@ -1,3 +1,4 @@
+-- +goose Up
 CREATE TYPE gender_type AS ENUM('male','female','other');
 
 CREATE TABLE users (
@@ -11,3 +12,7 @@ CREATE TABLE users (
     phone VARCHAR(20) UNIQUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- +goose Down
+DROP TABLE users;
+DROP TYPE gender_type;
