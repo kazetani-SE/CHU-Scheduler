@@ -8,7 +8,7 @@ export type User = {
     phone?: string;
     created_at: string;
 }
-export type LoginRequest = {
+export type LoginPayload = {
     email: string;
     password: string;
 }
