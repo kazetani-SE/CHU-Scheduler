@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { LoginRequest } from "../../types/auth.ts";
+import type { LoginPayload } from "../../types/auth.ts";
 import { authService } from "../../services/authService.ts";
 
 export function useAuth() {
@@ -7,7 +7,7 @@ export function useAuth() {
     const [error, setError] = useState<string | null>(null);
 
     // Just mock behaviour of login
-    const login = async (request: LoginRequest) => {
+    const login = async (request: LoginPayload) => {
         setLoading(true);
         setError(null);
         try {

@@ -8,11 +8,11 @@ import EmptyAvatar from "../components/EmptyAvatar.tsx";
 import {Link, useNavigate} from "react-router-dom";
 import {Checkbox} from "../components/ui/checkbox.tsx";
 import {Card} from "../components/ui/card.tsx";
-import type {LoginRequest} from "../types/auth.ts";
+import type {LoginPayload} from "../types/auth.ts";
 import {useAuth} from "../hooks/auth/useAuth.ts";
 
-export default function LoginPage() {
-    const [isLogin, setIsLogin] = useState(true);
+export default function LoginPage({isisLogin}:{isisLogin:boolean}) {
+    const [isLogin, setIsLogin] = useState(isisLogin);
 
     return (
         <div className="flex flex-row justify-between w-full h-[100vh] relative overflow-hidden">
@@ -27,7 +27,7 @@ export default function LoginPage() {
 
 function LoginPart() {
     const [canSee, setCanSee] = useState(false);
-    const [request, setRequest] = useState<LoginRequest>({email: "", password: ""});
+    const [request, setRequest] = useState<LoginPayload>({email: "", password: ""});
     const [error, setError] = useState<string>("")
     const {login} = useAuth();
     const navigate = useNavigate();
@@ -35,7 +35,7 @@ function LoginPart() {
     const showPassword = () => setCanSee(prev => !prev);
 
     // Just enter any email and password, it will accept all
-    const handleSubmit = async (request: LoginRequest) => {
+    const handleSubmit = async (request: LoginPayload) => {
         if (!request.email || !request.password) {
             setError("Email and password are required");
             return;
@@ -138,8 +138,17 @@ function SlidingDoor({isLogin, setIsLogin}:
         return isLogin ? "ml-[40vw]" : "";
     }
 
+    const navigate = useNavigate();
+
+
     const setSliding = () => {
         setIsLogin(prev => !prev);
+        if (isLogin) {
+            navigate(ROUTES.REGISTER);
+            return;
+        }
+
+        navigate(ROUTES.LOGIN);
     }
 
     return (
@@ -218,23 +227,11 @@ function SlidingDoor({isLogin, setIsLogin}:
                     </h1>
 
                     <div className="flex flex-col justify-start w-2/3 gap-4 mt-[1vh]">
-                        <Card className=" flex flex-row items-center gap-3
-                    w-full bg-blue-100/15 border-none ring-0 text-white
-                    font-bold px-[1.5vw] py-[1.5vh] text-xl">
-                            <Circle className="w-5 h-5 stroke-green-400 fill-green-400"/> Smart scheduling
-                        </Card>
+                        <DecorationCard content={"Smart scheduling"}/>
 
-                        <Card className=" flex flex-row items-center gap-3
-                    w-full bg-blue-100/15 border-none ring-0 text-white
-                    font-bold px-[1.5vw] py-[1.5vh] text-xl">
-                            <Circle className="w-5 h-5 stroke-green-400 fill-green-400"/> Seamless Group Coordination
-                        </Card>
+                        <DecorationCard content={"Seamless Group Coordination"}/>
 
-                        <Card className=" flex flex-row items-center gap-3
-                    w-full bg-blue-100/15 border-none ring-0 text-white
-                    font-bold px-[1.5vw] py-[1.5vh] text-xl">
-                            <Circle className="w-5 h-5 stroke-green-400 fill-green-400"/> Dynamic Schedule Agility
-                        </Card>
+                        <DecorationCard content={"Dynamic Schedule Agility"}/>
                     </div>
 
                     <Button
@@ -359,5 +356,15 @@ function RegisterPart(){
                 </div>
             </div>
         </div>
+    );
+}
+
+function DecorationCard({content}: { content:string }){
+    return(
+        <Card className=" flex flex-row items-center gap-3
+                    w-full bg-blue-100/15 border-none ring-0 text-white
+                    font-bold px-[1.5vw] py-[1.7vh] text-xl">
+            <Circle className="w-5 h-5 stroke-green-400 fill-green-400"/> {content}
+        </Card>
     );
 }

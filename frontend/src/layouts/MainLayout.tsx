@@ -1,14 +1,12 @@
 import {CircleUserRound, Menu} from "lucide-react";
 import {Outlet} from "react-router-dom";
 import {useState} from "react";
+import EmptyAvatar from "../components/EmptyAvatar.tsx";
+import {useFriendList} from "../hooks/friend/useFriendList.ts";
+import {useGroupList} from "../hooks/group/useGroupList.ts";
 
-// type User = {
-//     name: string;
-//     avatar: string;
-// } | null;
-
-const DEFAULT_MENUBAR_WIDTH = 4;
-const MAX_MENUBAR_WIDTH = 15;
+const DEFAULT_MENUBAR_WIDTH = 4.6;
+const MAX_MENUBAR_WIDTH = 15.5;
 const MENUBAR_DURATION = "duration-200";
 
 export default function MainLayout() {
@@ -19,7 +17,7 @@ export default function MainLayout() {
     };
 
     return (
-        <div className="h-screen flex flex-col">
+        <div className="h-screen flex flex-col bg-gray-900">
 
             <div className="h-[7vh] flex justify-between items-center
             w-full pr-4 sticky top-0 z-50"
@@ -33,7 +31,7 @@ export default function MainLayout() {
                             className="flex justify-center items-center cursor-pointer
                     hover:bg-gray-400 rounded-full w-10 h-10"
                         >
-                            <Menu />
+                            <Menu color={"white"}/>
                         </button>
                     </div>
 
@@ -62,9 +60,9 @@ export default function MainLayout() {
                     </div>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 text-white">
                     <p className="text-xl">Avatar</p>
-                    <CircleUserRound className="w-[2.5vw] h-[2.5vw]"/>
+                    <CircleUserRound className="w-[2.5vw] h-[2.5vw]" color={"white"}/>
                 </div>
             </div>
 
@@ -79,48 +77,62 @@ export default function MainLayout() {
     );
 }
 
-function MenuBar({ width }: { width: number }) {
+function MenuBar({ width }:
+                 { width: number}) {
+    const [chosenId, setChosenId] = useState<string>("Your id");
+
+    const {friendList} = useFriendList();
+    const {groupList} = useGroupList()
+
     return (
         <div
-            className={`flex flex-col items-start justify-start gap-2
-            border-r-1 border-gray-100 transition-all ${MENUBAR_DURATION} pl-2 pt-4`}
+            className={`flex flex-col items-start justify-start gap-2 text-white
+            border-gray-100 transition-all ${MENUBAR_DURATION} pl-2 py-4
+            overflow-y-auto max-h-screen overflow-x-hidden no-scrollbar`}
             style={{ width: `${width}vw` }}
         >
-            <div className="flex flex-row items-center justify-start gap-2">
-                <CircleUserRound className="w-[2.5vw] h-[2.5vw] flex-shrink-0"/>
+
+            <div id={"Your id"} className="flex flex-row items-center justify-start gap-2">
+                <EmptyAvatar name={"You"} className={miniIcon(chosenId === "Your id")} isChosen={chosenId === "Your id"}
+                    onClick={() => setChosenId("Your id")}
+                />
                 <p className={`transition-[width] ${MENUBAR_DURATION} whitespace-nowrap overflow-hidden
                  ${width === MAX_MENUBAR_WIDTH ? 'w-full' : 'w-0'}`}>
-                    Name of user or group
+                    Account Name
                 </p>
             </div>
-            <div className="flex flex-row items-center justify-start gap-2">
-                <CircleUserRound className="w-[2.5vw] h-[2.5vw] flex-shrink-0"/>
-                <p className={`transition-[width] ${MENUBAR_DURATION} whitespace-nowrap overflow-hidden
-                 ${width === MAX_MENUBAR_WIDTH ? 'w-full' : 'w-0'}`}>
-                    Name of user or group
-                </p>
-            </div>
-            <div className="flex flex-row items-center justify-start gap-2">
-                <CircleUserRound className="w-[2.5vw] h-[2.5vw] flex-shrink-0"/>
-                <p className={`transition-[width] ${MENUBAR_DURATION} whitespace-nowrap overflow-hidden
-                 ${width === MAX_MENUBAR_WIDTH ? 'w-full' : 'w-0'}`}>
-                    Name of user or group
-                </p>
-            </div>
-            <div className="flex flex-row items-center justify-start gap-2">
-                <CircleUserRound className="w-[2.5vw] h-[2.5vw] flex-shrink-0"/>
-                <p className={`transition-[width] ${MENUBAR_DURATION} whitespace-nowrap overflow-hidden
-                 ${width === MAX_MENUBAR_WIDTH ? 'w-full' : 'w-0'}`}>
-                    Name of user or group
-                </p>
-            </div>
-            <div className="flex flex-row items-center justify-start gap-2">
-                <CircleUserRound className="w-[2.5vw] h-[2.5vw] flex-shrink-0"/>
-                <p className={`transition-[width] ${MENUBAR_DURATION} whitespace-nowrap overflow-hidden
-                 ${width === MAX_MENUBAR_WIDTH ? 'w-full' : 'w-0'}`}>
-                    Name of user or group
-                </p>
-            </div>
+
+            <p className="text-gray-500 text-sm font-semibold border-t-2 border-gray-500 pt-1">
+                Friends
+            </p>
+
+            {friendList.map((friend) => (
+                <div id={friend.id} className="flex flex-row items-center justify-start gap-2">
+                    <EmptyAvatar name={friend.name} className={miniIcon(chosenId === friend.id)} isChosen={chosenId === friend.id}
+                        onClick={() => setChosenId(friend.id)}
+                    />
+                    <p className={`transition-[width] ${MENUBAR_DURATION} whitespace-nowrap overflow-hidden
+                 ${width === MAX_MENUBAR_WIDTH ? 'w-full' : 'w-0'} text-wrap`}>
+                        {friend.name}
+                    </p>
+                </div>
+            ))}
+
+            <p className="text-gray-500 text-sm font-semibold border-t-2 border-gray-500 pt-1">
+                Groups
+            </p>
+
+            {groupList.map((group) => (
+                <div id={group.id} className="flex flex-row items-center justify-start gap-2">
+                    <EmptyAvatar name={group.name} className={miniIcon(chosenId === group.id)} isChosen={chosenId === group.id}
+                        onClick={() => setChosenId(group.id)}
+                    />
+                    <p className={`transition-[width] ${MENUBAR_DURATION} whitespace-nowrap overflow-hidden
+                 ${width === MAX_MENUBAR_WIDTH ? 'w-full' : 'w-0'} text-wrap`}>
+                        {group.name}
+                    </p>
+                </div>
+            ))}
         </div>
     );
 }
@@ -148,3 +160,8 @@ function MenuBar({ width }: { width: number }) {
 //         </div>
 //     );
 // }
+
+const miniIcon = (isChosen:boolean) => {
+    return `w-[3.3vw] aspect-square flex-shrink-0 !text-[2.2vh] cursor-pointer
+            ${isChosen? "!border-3 brightness-110" :"!border-none"} `
+}
