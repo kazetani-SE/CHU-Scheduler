@@ -31,6 +31,7 @@ func gracefulShutdown(server *fuego.Server, done chan bool) {
 }
 
 func main() {
+
 	server := server.NewServer()
 
 	done := make(chan bool, 1)
