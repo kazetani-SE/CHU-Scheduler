@@ -1,5 +1,5 @@
 import apiClient from "./axiosClient.ts";
-import type { LoginRequest, User } from "../types/auth.ts";
+import type { LoginPayload, User } from "../types/auth.ts";
 
 const USE_MOCK = true;
 
@@ -11,7 +11,7 @@ const MOCK_USER: User = {
 };
 
 export const authService = {
-    login: async (request: LoginRequest): Promise<User> => {
+    login: async (request: LoginPayload): Promise<User> => {
         if (USE_MOCK) {
             return MOCK_USER;
         }

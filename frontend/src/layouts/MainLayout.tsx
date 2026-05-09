@@ -109,6 +109,38 @@ function MenuBar() {
                 </div>
                 </Link>
             </div>
+
+            <p className="text-gray-500 text-sm font-semibold border-t-2 border-gray-500 pt-1">
+                Friends
+            </p>
+
+            {friendList.map((friend) => (
+                <div id={friend.id} className="flex flex-row items-center justify-start gap-2">
+                    <EmptyAvatar name={friend.name} className={miniIcon(chosenId === friend.id)} isChosen={chosenId === friend.id}
+                        onClick={() => setChosenId(friend.id)}
+                    />
+                    <p className={`transition-[width] ${MENUBAR_DURATION} whitespace-nowrap overflow-hidden
+                 ${width === MAX_MENUBAR_WIDTH ? 'w-full' : 'w-0'} text-wrap`}>
+                        {friend.name}
+                    </p>
+                </div>
+            ))}
+
+            <p className="text-gray-500 text-sm font-semibold border-t-2 border-gray-500 pt-1">
+                Groups
+            </p>
+
+            {groupList.map((group) => (
+                <div id={group.id} className="flex flex-row items-center justify-start gap-2">
+                    <EmptyAvatar name={group.name} className={miniIcon(chosenId === group.id)} isChosen={chosenId === group.id}
+                        onClick={() => setChosenId(group.id)}
+                    />
+                    <p className={`transition-[width] ${MENUBAR_DURATION} whitespace-nowrap overflow-hidden
+                 ${width === MAX_MENUBAR_WIDTH ? 'w-full' : 'w-0'} text-wrap`}>
+                        {group.name}
+                    </p>
+                </div>
+            ))}
         </div>
     );
 }
@@ -136,3 +168,8 @@ function MenuBar() {
 //         </div>
 //     );
 // }
+
+const miniIcon = (isChosen:boolean) => {
+    return `w-[3.3vw] aspect-square flex-shrink-0 !text-[2.2vh] cursor-pointer
+            ${isChosen? "!border-3 brightness-110" :"!border-none"} `
+}
