@@ -1,105 +1,113 @@
-import {CircleUserRound, Menu} from "lucide-react";
-import {Outlet} from "react-router-dom";
-import {useState} from "react";
-import EmptyAvatar from "../components/EmptyAvatar.tsx";
-import {useFriendList} from "../hooks/friend/useFriendList.ts";
-import {useGroupList} from "../hooks/group/useGroupList.ts";
+import {CircleUserRound} from "lucide-react";
+import { Settings } from 'lucide-react';
+import {Link, Outlet} from "react-router-dom";
+import { CalendarFold } from 'lucide-react';
+import { Users } from 'lucide-react';
+import { AlarmClock } from 'lucide-react';
+import { Power } from 'lucide-react';
+import { NotebookPen } from 'lucide-react';
 
-const DEFAULT_MENUBAR_WIDTH = 4.6;
-const MAX_MENUBAR_WIDTH = 15.5;
-const MENUBAR_DURATION = "duration-200";
+// type User = {
+//     name: string;
+//     avatar: string;
+// } | null;
+
+// Light Mode
+// Ocean Blue Palette
+// Sidebar:   #3B5998  (navy blue)
+// Topbar:    #5B7FCB  (medium blue)
+// Icons:     #a8c0ff  (light blue)
+// Accent:    #4A6CF7  (vivid blue)
+// BG light:  #e8eef8  (very light blue)
+
+// Dark Mode
+// Sidebar: #0f1c38 (dark navy)
+// Topbar: #1a2744 (dark blue)
+// Background : #111827 + #0d1321
+// Icons & accent: #378ADD (Light blue)
+// Text: #b5d4f4 (faded blue)
+// Chat bubble: #185FA5
 
 export default function MainLayout() {
-    const [menuBarWidth, setMenuBarWidth] = useState<number>(DEFAULT_MENUBAR_WIDTH);
-
-    const menuOnClick = () => {
-        setMenuBarWidth(menuBarWidth === DEFAULT_MENUBAR_WIDTH ? MAX_MENUBAR_WIDTH : DEFAULT_MENUBAR_WIDTH);
-    };
 
     return (
-        <div className="h-screen flex flex-col bg-gray-900">
+        <div className="h-screen flex flex-col" style={{ background: "#e8eef8" }}>
 
-            <div className="h-[7vh] flex justify-between items-center
-            w-full pr-4 sticky top-0 z-50"
+            <div
+                className="pl-3 py-3 h-[5vh] flex flex-col justify-between w-full top-0"
+                style={{ background: "#5B7FCB" }}
             >
                 <div className="flex flex-row justify-start items-center gap-2">
-                    <div className="flex flex-row justify-center items-center"
-                         style={{ width: `${DEFAULT_MENUBAR_WIDTH}vw` }}
-                    >
-                        <button
-                            onClick={menuOnClick}
-                            className="flex justify-center items-center cursor-pointer
-                    hover:bg-gray-400 rounded-full w-10 h-10"
-                        >
-                            <Menu color={"white"}/>
-                        </button>
-                    </div>
-
-                    <div className="flex flex-row justify-start items-center gap-[5vw] cursor-pointer">
-                        <h1>
-                            LOGO
+                    <div className="flex justify-start items-center gap-5 cursor-pointer" style={{ color: "#fff" }}>
+                        <h1 className="font-bold tracking-wide text-white">
+                            CHU
                         </h1>
 
                         <div className="flex flex-row justify-center items-center gap-4">
-                            <p className="text-gray-500 font-medium cursor-pointer">
-                                Home
-                            </p>
+                            <p className="font-medium cursor-pointer hover:opacity-75 transition-opacity">Home</p>
+                            <p className="font-medium cursor-pointer hover:opacity-75 transition-opacity">Dashboard</p>
+                            <p className="font-medium cursor-pointer hover:opacity-75 transition-opacity">Feedback</p>
+                            <p className="font-medium cursor-pointer hover:opacity-75 transition-opacity">Contact us</p>
+                        </div>
 
-                            <p className="text-gray-500 font-medium cursor-pointer">
-                                Dashboard
-                            </p>
-
-                            <p className="text-gray-500 font-medium cursor-pointer">
-                                Feedback
-                            </p>
-
-                            <p className="text-gray-500 font-medium cursor-pointer">
-                                Contact us
-                            </p>
+                        <div className="ml-306">
+                            <CircleUserRound className="w-[1.8vw] h-[1.8vw] shrink-0 text-white" />
                         </div>
                     </div>
                 </div>
-
-                <div className="flex items-center gap-2 text-white">
-                    <p className="text-xl">Avatar</p>
-                    <CircleUserRound className="w-[2.5vw] h-[2.5vw]" color={"white"}/>
-                </div>
             </div>
 
-            <div className="flex flex-1 overflow-hidden">
-                <MenuBar width={menuBarWidth}/>
-                <div className="flex-1 overflow-y-auto p-4">
+            <div className="flex h-full">
+                <MenuBar />
+                <div
+                    className="flex-1 overflow-y-auto p-0 rounded-tl-xl"
+                    style={{ background: "#fff" }}
+                >
                     <Outlet />
                 </div>
-
             </div>
         </div>
     );
 }
 
-function MenuBar({ width }:
-                 { width: number}) {
-    const [chosenId, setChosenId] = useState<string>("Your id");
-
-    const {friendList} = useFriendList();
-    const {groupList} = useGroupList()
-
+function MenuBar() {
     return (
         <div
-            className={`flex flex-col items-start justify-start gap-2 text-white
-            border-gray-100 transition-all ${MENUBAR_DURATION} pl-2 py-4
-            overflow-y-auto max-h-screen overflow-x-hidden no-scrollbar`}
-            style={{ width: `${width}vw` }}
+            className="flex flex-col items-center border-gray-100 py-5 px-2"
+            style={{ background: "#3B5998" }}
         >
+            <div className="flex flex-col items-center gap-6 flex-1">
+                <Link to="/main"> 
+                <div className="p-2 rounded-lg cursor-pointerhover:bg-white/10 active:bg-white/20 transition-colors">
+                    <Users className="w-[1.5vw] h-[1.5vw] shrink-0" style={{ color: "#a8c0ff" }} />
+                </div>
+                </Link>
 
-            <div id={"Your id"} className="flex flex-row items-center justify-start gap-2">
-                <EmptyAvatar name={"You"} className={miniIcon(chosenId === "Your id")} isChosen={chosenId === "Your id"}
-                    onClick={() => setChosenId("Your id")}
-                />
-                <p className={`transition-[width] ${MENUBAR_DURATION} whitespace-nowrap overflow-hidden
-                 ${width === MAX_MENUBAR_WIDTH ? 'w-full' : 'w-0'}`}>
-                    Account Name
-                </p>
+                <Link to="/calendar">                         
+                <div className="p-2 rounded-lg cursor-pointer hover:bg-white/10 active:bg-white/20 transition-colors">
+                    <CalendarFold className="w-[1.7vw] h-[1.7vw] shrink-0" style={{ color: "#a8c0ff" }} />
+                </div>
+                </Link>
+
+                <div className="p-2 rounded-lg cursor-pointer hover:bg-white/10 active:bg-white/20 transition-colors">
+                    <AlarmClock className="w-[1.7vw] h-[1.7vw] shrink-0" style={{ color: "#a8c0ff" }} />
+                </div>
+
+                <div className="p-2 rounded-lg cursor-pointer hover:bg-white/10 active:bg-white/20 transition-colors">
+                    <NotebookPen className="w-[1.7vw] h-[1.7vw] shrink-0" style={{ color: "#a8c0ff" }} />
+                </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-4 mt-auto">
+                <div className="p-2 rounded-lg cursor-pointer hover:bg-white/10 active:bg-white/20 transition-colors">
+                    <Settings className="w-[1.5vw] h-[1.5vw] shrink-0" style={{ color: "#a8c0ff" }} />
+                </div>
+                
+                <Link to="/login">  
+                <div className="p-2 rounded-lg cursor-pointer hover:bg-red-300 active:bg-red-400 transition-colors" style={{ color: "#a8c0ff" }} >
+                    <Power className="w-[1.5vw] h-[1.5vw] shrink-0 hover:text-amber-50" />
+                </div>
+                </Link>
             </div>
 
             <p className="text-gray-500 text-sm font-semibold border-t-2 border-gray-500 pt-1">

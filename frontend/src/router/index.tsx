@@ -4,6 +4,7 @@ import MainPage from "../pages/MainPage.tsx";
 import MainLayout from "../layouts/MainLayout.tsx";
 import LoginPage from "../pages/LoginPage.tsx";
 import ExamplePage from "../pages/_guide.tsx";
+import CalendarPage from "../pages/CalendarPage.tsx";
 import ExampleHeader from "../layouts/_guide.tsx";
 
 export const router = createBrowserRouter([
@@ -24,5 +25,11 @@ export const router = createBrowserRouter([
         path: ROUTES.MAIN_PAGE,
         element: <MainLayout/>,
         children:[{index: true, element: <MainPage/>}],
+    },
+    
+    {
+        path: ROUTES.CALENDAR_PAGE,
+        element: <MainLayout/>,
+        children:[{index: true, element: <CalendarPage/>}],
     }
 ]);

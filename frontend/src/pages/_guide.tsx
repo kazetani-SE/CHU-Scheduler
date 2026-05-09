@@ -24,6 +24,12 @@ export default function ExamplePage() {
             >
                 Move to login page
             </Button>
+            <Button
+                className="border-2 border-blue-800"
+                onClick={() => navigate(ROUTES.MAIN_PAGE)}
+            >
+                Move to main page
+            </Button>
         </div>
     );
 }
