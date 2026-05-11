@@ -48,7 +48,7 @@ function LoginPart() {
                 return;
             }
             console.log(user);
-            navigate(ROUTES.MAIN_PAGE);
+            navigate(ROUTES.ENTITY_PAGE);
         }catch(error){
             console.error("Login failed:", error);
             setError("Email or password incorrect!");

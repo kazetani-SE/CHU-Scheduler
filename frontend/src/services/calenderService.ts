@@ -58,5 +58,14 @@ export const calenderService = {
     getEvents: async (signal?: AbortSignal): Promise<CalendarEvent[]> => {
         if (USE_MOCK) return mockEventList;
         return apiClient.get("/events", { signal }) as unknown as Promise<CalendarEvent[]>;
-    }
+    },
+
+    getEventsByOwner: async (id: string, signal?: AbortSignal): Promise<CalendarEvent[]> => {
+        return apiClient.get(`/events/owner=${id}`, { signal }) as unknown as Promise<CalendarEvent[]>;
+    },
+
+    getEventById: async (id: string, signal?: AbortSignal): Promise<CalendarEvent | undefined> => {
+        if (USE_MOCK) return mockEventList.find(e => e.id === id);
+        return apiClient.get(`/events/${id}`, { signal }) as unknown as Promise<CalendarEvent>;
+    },
 }
