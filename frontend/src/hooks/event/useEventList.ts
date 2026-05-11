@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { calenderService } from "../../services/calenderService.ts";
 import type { CalendarEvent } from "../../types/event.ts";
 
-export function useEventList() {
+export function useEventList(id?: string) {
     const [eventList, setEventList] = useState<CalendarEvent[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -14,8 +14,13 @@ export function useEventList() {
             setLoading(true);
             setError(null);
             try {
-                const data = await calenderService.getEvents(controller.signal);
-                setEventList(data);
+                if (id) {
+                    const data = await calenderService.getEventsByOwner(id, controller.signal);
+                    setEventList(data);
+                } else {
+                    const data = await calenderService.getEvents(controller.signal);
+                    setEventList(data);
+                }
             } catch (err) {
                 if ((err as Error).name !== "AbortError") {
                     setError("Failed to fetch events");
@@ -28,7 +33,7 @@ export function useEventList() {
         fetchEvents();
 
         return () => controller.abort();
-    }, []);
+    }, [id]);
 
     return { eventList, loading, error };
 }

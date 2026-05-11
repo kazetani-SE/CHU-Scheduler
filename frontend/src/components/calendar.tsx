@@ -4,7 +4,8 @@ import FullCalendar from "@fullcalendar/react";
 import {useEventList} from "../hooks/event/useEventList.ts";
 
 export default function Calendar() {
-    const {eventList} = useEventList();
+    //const id = useParam();
+    const {eventList} = useEventList(); // use the id in the real project
 
     return (
         <div className="h-full bg-gray-100 p-4">
